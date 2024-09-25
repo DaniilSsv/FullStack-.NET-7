@@ -1,0 +1,44 @@
+﻿@model IEnumerable<FullstackOpdracht.ViewModels.MatchVM>
+
+@{
+    ViewData["Title"] = "Tickets";
+}
+
+<h1>Tickets</h1>
+
+
+<table class="table">
+    <thead>
+        <tr>
+
+            <th>
+                Thuisploeg
+            </th>
+            <th>
+                Bezoekers
+            </th>
+            <th>
+                Datum
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.HomeTeam.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AwayTeam.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MatchDate)
+            </td>
+            <td>
+                <a asp-controller="ShoppingCart" asp-action="CreateTicket" asp-route-id="@item.Id"><button>Bestel je Tickets!</button></a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,0 +1,67 @@
+﻿@model FullstackOpdracht.ViewModels.CreateMembershipVM
+
+@{
+    ViewData["Title"] = "CreateAbonnement";
+}
+
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreateAbonnement">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+           
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Ring" class="control-label"></label>
+                <select required asp-for="Ring" class="form-control" asp-items="@Model.Rings" id="ringSelect">
+                    <option value="">--Select a ring</option>
+                </select>
+                <span asp-validation-for="Ring" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Section" class="control-label"></label>
+                <select required asp-for="Section" class="form-control" asp-items="@Model.Sections" id="sectionSelect">
+                    <option value="">--Select a section</option>
+                </select>
+                <span asp-validation-for="Section" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input asp-route-teamID="@Model.TeamId" type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(document).ready(function () {
+            $('#ringSelect').change(function () {
+                var selectedRingId = $(this).val();
+                $.ajax({
+                    url: '/ShoppingCart/GetSections',
+                    type: 'GET',
+                    data: { ringId: selectedRingId },
+                    success: function (data) {
+                        $('#sectionSelect').empty();
+                        $.each(data, function (index, value) {
+                            if (index !== 1) { // Filter out the second object
+                                $('#sectionSelect').append('<option value="' + value.id + '">' + value.name + '</option>');
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+}

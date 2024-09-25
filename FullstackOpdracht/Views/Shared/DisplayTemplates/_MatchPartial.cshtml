@@ -1,0 +1,16 @@
+﻿@model FullstackOpdracht.ViewModels.MatchVM
+
+
+
+        <tr>
+            <td>
+                @Html.DisplayFor(item => item.HomeTeam.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(item => item.AwayTeam.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => modelItem.MatchDate)
+            </td>
+
+        </tr>

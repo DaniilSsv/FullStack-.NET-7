@@ -1,0 +1,30 @@
+﻿@using FullstackOpdracht.Domains.Entities
+
+@{
+    @if (Model != null)
+    {
+            <table class="table table-striped mt-3">
+                <thead>
+                    <tr>
+                        <th>Home Team</th>
+                        <th>Away Team</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var match in Model)
+                    {
+                        <tr>
+                            <td>@match.HomeTeam.Name</td>
+                            <td>@match.AwayTeam.Name</td>
+                            <td>@match.MatchDate</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p class="mt-3">No matches found.</p>
+        }
+}

@@ -1,0 +1,58 @@
+﻿@model FullstackOpdracht.ViewModels.BestellingenVM
+
+@{
+    ViewData["Title"] = "Index";
+}
+<h3>
+    Uw Bestellingen :
+</h3>
+
+@if (Model != null)
+{
+    @if (Model.Bestelling != null && Model.Bestelling.Count > 0)
+    {
+        <form asp-action="Checkout">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">@Html.DisplayNameFor(model => model.Bestelling[0].OrderType)</th>
+                        <th scope="col">@Html.DisplayNameFor(model => model.Bestelling[0].Name)</th>
+                        <th scope="col">@Html.DisplayNameFor(model => model.Bestelling[0].Price)</th>
+                        <th scope="col">@Html.DisplayNameFor(model => model.Bestelling[0].MatchDate)</th>
+                        <th scope="col">@Html.DisplayNameFor(model => model.Bestelling[0].SeatName)</th>
+                        <th scope="col">@Html.DisplayNameFor(model => model.Bestelling[0].SeatRow)</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (var i = 0; i < Model.Bestelling.Count; i++)
+                    {
+                        <tr>
+                            <td><input asp-for="@Model.Bestelling[i].OrderType" readonly="readonly" class="form-control" /></td>
+                            <td><input asp-for="@Model.Bestelling[i].Name" readonly="readonly" class="form-control" /></td>
+                            <td><input asp-for="@Model.Bestelling[i].Price" readonly="readonly" class="form-control" /></td>
+                            <td><input asp-for="@Model.Bestelling[i].MatchDate" readonly="readonly" class="form-control" /></td>
+                            <td><input asp-for="@Model.Bestelling[i].SeatName" readonly="readonly" class="form-control" /></td>
+                            <td><input asp-for="@Model.Bestelling[i].SeatRow" readonly="readonly" class="form-control" /></td>
+                            @if (@Model.Bestelling[i].OrderType != "Membership" && Model.Bestelling[i].CanDeleteFree)
+                            {
+                                <td>
+                                    <a asp-action="PreDelete" asp-route-ticketId="@Model.Bestelling[i].TicketId">
+                                        <img class="trash" src="~/images/trashcan.png" />
+                                    </a>
+                                </td>
+                            }
+                    </tr>
+                }
+            </table>
+        </form>
+    }
+    else
+    {
+        @Html.Raw("Je hebt geen tickets besteld")
+    }
+}
+else
+{
+    @Html.Raw("Je hebt geen tickets besteld")
+}

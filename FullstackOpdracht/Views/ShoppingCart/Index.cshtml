@@ -1,0 +1,140 @@
+﻿@model FullstackOpdracht.ViewModels.ShoppingCartVM
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h3>
+    Uw winkelkar :
+</h3>
+
+@if (Model != null)
+{
+    @if (Model.Cart.Count > 0)
+    {
+        <form asp-action="Checkout">
+            <table>
+                <tr>
+                    <th>Hotel</th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Cart[0].Naam)
+                    </th>
+                    <th>
+                        Vak
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Cart[0].Aantal)
+                    </th>
+                    <th>
+                        @(@Html.DisplayNameFor(model => model.Cart[0].Prijs) + " Per Ticket")
+                    </th>
+                    <th>
+                        Subtotaal
+                    </th>
+                </tr>
+                @{
+                    float? total = 0;
+                }
+                @for (var i = 0; i < Model.Cart.Count; i++)
+                {
+                    <tr>
+                        <td>
+                            <a asp-controller="Hotel" asp-action="Hotel" asp-route-id="@Model.Cart[i].MatchId">
+                                Hotels in de buurt
+                            </a>
+                        </td>
+                        <td>
+                            <p class="custom-name">
+                                @Model.Cart[i].Naam
+                            </p>
+                        </td>
+                        <td><section>@Model.Cart[i].Section.Name</section></td>
+                        <td>
+                            @if (Model.Cart[i].TeamId != null)
+                            {
+                                <input asp-for="@Model.Cart[i].Aantal" type="number"
+                                min="1" max="1" data-aantal=@i />
+
+                            } else
+                            {
+                                <input asp-for="@Model.Cart[i].Aantal" type="number"
+                                       min="1" max="4" data-aantal=@i />
+                            }
+                        </td>
+                        <td>
+                            <input asp-for="@Model.Cart[i].Prijs" type="number"
+                                   readonly="readonly" />
+
+                            @{
+                                var subtotaal = Model.Cart[i].Prijs
+                                * Model.Cart[i].Aantal;
+                                total += subtotaal;
+                            }
+                        </td>
+                        <td>
+                            <input id="@("txtSubTotal" + @i)"
+                                   value="@subtotaal"
+                                   type="number" readonly="readonly" />
+                        </td>
+
+                        <td>
+                            <a asp-action="Delete" asp-route-CartId="@Model.Cart[i].CartId">
+                                <img class="trash" src="~/images/trashcan.png" />
+                            </a>
+                        </td>
+                    </tr>
+                }
+                <tr>
+                    <td id="cart-total">
+                        Total  <input id="txtTotal" value="@total"
+                                      type="number" readonly="readonly" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="submit" value="Checkout"
+                               class="btn btn-default bg-secondary text-white" asp-action="Checkout" />
+                    </td>
+                </tr>
+            </table>
+        </form>
+    }
+    else
+    {
+        @Html.Raw("Jouw winkelkar is leeg")
+    }
+}
+else
+{
+    @Html.Raw("Jouw winkelkar is leeg")
+}
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            // Listen for changes in quantity fields
+            $("input[data-aantal]").change(function () {
+                // Get the index from the data-aantal attribute
+                var index = $(this).data("aantal");
+
+                // Calculate the new subtotal
+                var price = parseFloat($(`#Cart_${index}__Prijs`).val());
+                var quantity = parseInt($(this).val());
+                var subtotal = price * quantity;
+
+                // Update the subtotal field
+                $(`#txtSubTotal${index}`).val(subtotal.toFixed(2));
+
+                // Calculate the new total
+                var total = 0;
+                $("input[id^='txtSubTotal']").each(function () {
+                    total += parseFloat($(this).val());
+                });
+
+                // Update the total field
+                $("#txtTotal").val(total.toFixed(2));
+            });
+        });
+    </script>
+}
+<a asp-controller="Profliga" asp-action="Tickets"> Ga verder met winkelen</a>

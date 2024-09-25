@@ -1,0 +1,23 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization;
+@inject IViewLocalizer Localizer;
+
+@{
+    Layout = "~/Views/Shared/_LangLayout.cshtml";
+}
+
+
+
+<div class="container">
+    <h1>Jupiler Pro League</h1>
+
+    <h2>
+        @Localizer["Welcome"].Value
+    </h2>
+
+    <p>@Localizer["WelcomeText"].Value</p>
+</div>
+
+<div class="container">
+    <p>@Localizer["AboutUs"].Value</p>
+</div>
+

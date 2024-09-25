@@ -1,0 +1,67 @@
+﻿@model IEnumerable<FullstackOpdracht.ViewModels.MatchVM>
+@using FullstackOpdracht.Domains.Entities
+
+
+<div class="row">
+    <div class="col-md-4">
+        <form id="teamForm" 
+              class="form-group" 
+              asp-controller="Profliga"
+              asp-action="Matches"
+              data-ajax="true"
+              data-ajax-method="POST"
+              data-ajax-mode="replace"
+              data-ajax-update="#content"
+              data-ajax-success="Success"
+              data-ajax-failure="Failure">
+
+    <label for="teamSelect" class="form-label">Select Team:</label>
+    <select id="teamSelect" name="teamId" class="form-select" asp-items="@ViewBag.lstPloegen">
+       <option>Kies een ploeg</option>
+    </select>
+</form>
+    </div>
+</div>
+
+
+
+<div class="container">
+    <table class="table">
+        <thead>
+            <tr>
+
+                <th>
+                    Thuisploeg
+                </th>
+                <th>
+                    Bezoekers
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.MatchDate)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+
+@foreach (var item in Model)
+{
+    @await Html.PartialAsync("DisplayTemplates/_MatchPartial", item)
+}
+
+        </tbody>
+    </table>
+
+
+</div>
+
+@section scripts {
+    <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.min.js"></script>
+
+    <script>
+        $("#teamSelect").on("change", () => {
+            $("form").trigger("submit");
+        });
+    </script>
+}
+
